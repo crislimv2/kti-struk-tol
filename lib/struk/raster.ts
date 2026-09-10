@@ -1,8 +1,27 @@
 import "server-only";
+import opentype from "opentype.js";
 import sharp from "sharp";
 import { LEBAR_DOT, geometriLogo, LOGO_GAP, bersihkan } from "./format";
+import fontBoldJson from "./fonts/bold.json";
+import fontRegularJson from "./fonts/regular.json";
 import { ikonTelepon } from "./ikon";
 import type { LebarKertas, LogoBitmap } from "./types";
+
+/**
+ * Font disertakan di repo (Liberation Sans, metrik sama dengan Arial, lisensi OFL) dan teks
+ * diubah menjadi outline (path SVG) lewat opentype.js sebelum dirender sharp. Dengan begitu
+ * hasil raster identik di Windows, Docker, maupun Vercel tanpa font sistem.
+ */
+function muatFont(j: { data: string }): opentype.Font {
+  const buf = Buffer.from(j.data, "base64");
+  return opentype.parse(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
+}
+let fontRegular: opentype.Font | null = null;
+let fontBold: opentype.Font | null = null;
+function font(bold: boolean): opentype.Font {
+  if (bold) return (fontBold ??= muatFont(fontBoldJson));
+  return (fontRegular ??= muatFont(fontRegularJson));
+}
 
 /** Bitmap 1 byte per pixel: 1 = hitam. */
 export interface Mono {
@@ -26,8 +45,6 @@ export interface HeaderSpec {
   ikonTelepon: boolean;
   lebar: LebarKertas;
 }
-
-const FONT = "Arial, Helvetica, sans-serif";
 
 function monoKosong(width: number, height: number): Mono {
   return { width, height, px: new Uint8Array(width * height) };
@@ -64,18 +81,37 @@ function ikonKeMono(lebar: LebarKertas): Mono {
   return m;
 }
 
-/** Render teks jadi bitmap hitam-putih (sharp/librsvg, font sistem), dipangkas kiri-kanan. */
+/**
+ * Render teks jadi bitmap hitam-putih: glyph -> path SVG (opentype.js, font di repo) -> sharp,
+ * dipangkas ke batas tinta. Tidak memakai font sistem sama sekali.
+ */
 export async function teksMono(
   text: string,
   opts: { size: number; bold?: boolean; letterSpacing?: number },
 ): Promise<Mono> {
   const t = bersihkan(text);
   if (!t.trim()) return monoKosong(1, Math.ceil(opts.size * 1.3));
-  const esc = t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const f = font(Boolean(opts.bold));
   const ls = opts.letterSpacing ?? 0;
-  const h = Math.ceil(opts.size * 1.35);
-  const w = Math.ceil(t.length * (opts.size * 0.8 + ls)) + 16;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><text x="4" y="${Math.round(opts.size * 1.02)}" font-family="${FONT}" font-size="${opts.size}" font-weight="${opts.bold ? 700 : 400}" letter-spacing="${ls}" fill="#000">${esc}</text></svg>`;
+  const size = opts.size;
+  const skala = size / f.unitsPerEm;
+  // susun path per glyph agar letter-spacing bisa diatur
+  let x = 4;
+  const baseline = Math.round(size * 1.02);
+  const paths: string[] = [];
+  const glyphs = f.stringToGlyphs(t);
+  for (let i = 0; i < glyphs.length; i++) {
+    const g = glyphs[i];
+    const p = g.getPath(x, baseline, size);
+    const d = p.toPathData(2);
+    if (d) paths.push(d);
+    const adv = (g.advanceWidth ?? 0) * skala;
+    const kern = i + 1 < glyphs.length ? f.getKerningValue(g, glyphs[i + 1]) * skala : 0;
+    x += adv + kern + ls;
+  }
+  const h = Math.ceil(size * 1.35);
+  const w = Math.ceil(x) + 8;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><path d="${paths.join(" ")}" fill="#000"/></svg>`;
   const { data, info } = await sharp(Buffer.from(svg))
     .flatten({ background: "#fff" })
     .greyscale()

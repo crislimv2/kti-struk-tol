@@ -1,0 +1,7 @@
+# Reverse proxy + HTTPS otomatis (Let's Encrypt) untuk VPS.
+# Ganti struk.domain-anda.com dengan domain yang mengarah ke IP VPS, lalu:
+#   docker run -d --name caddy --restart unless-stopped --network host \
+#     -v $PWD/deploy/Caddyfile:/etc/caddy/Caddyfile -v caddy_data:/data caddy:2
+struk.domain-anda.com {
+    reverse_proxy 127.0.0.1:3000
+}

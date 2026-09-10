@@ -28,6 +28,7 @@ npm run lint         # eslint flat config (eslint-config-next 16)
 npm run typecheck    # tsc --noEmit
 npm run print:test   # cetak struk contoh HALIM + logo langsung ke printer, tanpa web (arg: nama printer)
 npm run logos:build  # public/logos/*.svg -> lib/struk/logos/*.json (1-bit) + public/logos/mono/*.png (sharp)
+npm run fonts:build  # public/fonts/*.ttf -> lib/struk/fonts/*.json (opentype.js, raster kepala)
 ```
 
 Jangan `npm run build` saat dev server jalan (berbagi `.next/`).
@@ -157,3 +158,21 @@ Target: web di Vercel (gratis), dipakai orang lain, printer USB di PC mereka.
 - Halaman HTTPS boleh fetch http://127.0.0.1 (origin aman) di Chrome/Edge/Firefox.
 - Opsi lokal tetap ada: scripts/prod-build.ps1, prod-start.ps1, install-autostart.ps1
   (build ke .next-prod via env STRUK_DIST_DIR agar tidak bentrok dev).
+- VPS tanpa Vercel: `Dockerfile` (node:22-alpine, `output: "standalone"`, apk fontconfig +
+  ttf-liberation agar sharp/librsvg punya font Arial-kompatibel untuk raster kepala),
+  `docker-compose.yml` (port 3000, restart), `deploy/Caddyfile` (HTTPS). Diuji lokal 2026-09-10:
+  image build OK, /api/header & /api/escpos jalan di Linux, /api/print GET mengembalikan kosong
+  (platform linux) sehingga UI beralih ke agen.
+- Font raster kepala (2026-09-10): TIDAK lagi memakai font sistem. `public/fonts/LiberationSans-*.ttf`
+  (OFL, metrik = Arial) -> `npm run fonts:build` -> `lib/struk/fonts/*.json` (base64) ->
+  raster.ts memuat via opentype.js, teks jadi path SVG, sharp merender path. Alasan: di Vercel
+  /api/header 500 dan di Docker teks hilang karena librsvg tidak menemukan font. Sekarang hasil
+  identik di Windows/Docker/Vercel. Dockerfile tidak perlu apk font.
+- Pemasangan agen di PC pengguna: SmartScreen/Execution Policy memblokir "Run with PowerShell"
+  pada .ps1 unduhan. Solusi: (1) web-installer `public/agent/install.ps1` dijalankan via
+  `powershell -ExecutionPolicy Bypass -Command "irm <origin>/agent/install.ps1 | iex"` (halaman
+  /agen membuat perintah sesuai domain, tombol salin); (2) launcher `Pasang-Agen-Cetak.cmd`
+  (Unblock-File + Bypass). Agen hanya listen loopback -> Windows Firewall tidak prompt.
+- Vercel: proyek tertaut (.vercel/, akun crislimv2), deploy `npx vercel --prod --yes`.
+  Perbaikan 2026-09-10: `outputFileTracingIncludes` untuk @img/sharp-libvips-linux-x64
+  (tanpa itu /api/header & /api/escpos 500: libvips-cpp.so tidak ikut ke bundle).

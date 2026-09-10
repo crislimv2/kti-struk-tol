@@ -1,0 +1,9 @@
+node_modules
+.next
+.next-prod
+logs
+.git
+.env*.local
+*.log
+.agents
+.claude

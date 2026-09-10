@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Download } from "lucide-react";
 import Link from "next/link";
+import { PerintahInstall } from "./perintah-install";
 
 export const metadata = {
   title: "Pasang Agen Cetak - KTI Struk Tol",
@@ -23,7 +24,7 @@ export default function AgenPage() {
 
       <Card className="mt-6">
         <CardHeader>
-          <CardTitle>Langkah pemasangan (Windows 10/11)</CardTitle>
+          <CardTitle>Cara 1 (disarankan): satu perintah, tanpa unduh file</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 text-sm">
           <ol className="list-decimal space-y-3 pl-5">
@@ -32,27 +33,50 @@ export default function AgenPage() {
               (Settings &gt; Bluetooth &amp; devices &gt; Printers &amp; scanners).
             </li>
             <li>
-              Unduh tiga file di bawah ini ke satu folder yang sama, misalnya <code>Downloads\AgenCetak</code>.
+              Buka PowerShell: tekan <kbd>Win</kbd>+<kbd>X</kbd> lalu pilih <strong>Terminal</strong> atau{" "}
+              <strong>Windows PowerShell</strong> (tidak perlu Administrator).
             </li>
-            <li>
-              Klik kanan <code>install-agent.ps1</code> lalu pilih <strong>Run with PowerShell</strong>. Bila
-              muncul peringatan keamanan, pilih Open / Run anyway. Tunggu sampai tertulis
-              &quot;Agen cetak terpasang dan berjalan&quot;.
-            </li>
-            <li>
-              Kembali ke halaman struk dan muat ulang. Printer Anda akan tampil di daftar Printer dan
-              tombol <strong>Cetak ESC/POS</strong> langsung mencetak ke printer tersebut.
-            </li>
+            <li>Salin perintah di bawah, tempel di PowerShell, tekan Enter.</li>
           </ol>
+          <PerintahInstall />
+          <p className="text-muted-foreground">
+            Perintah ini mengunduh agen langsung dari situs ini ke folder pengguna, mendaftarkannya agar
+            hidup otomatis saat logon, lalu menjalankannya. Tidak ada file yang &quot;diunduh dari internet&quot;
+            secara manual, sehingga tidak kena blokir SmartScreen, dan Execution Policy dilewati hanya
+            untuk perintah ini.
+          </p>
+          <p>
+            Setelah tertulis <strong>&quot;Agen cetak terpasang dan berjalan&quot;</strong>, kembali ke halaman
+            struk dan muat ulang. Printer Anda akan tampil di daftar Printer.
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Cara 2: unduh file lalu klik dua kali</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4 text-sm">
+          <p>
+            Unduh empat file berikut ke satu folder yang sama, lalu klik dua kali{" "}
+            <code>Pasang-Agen-Cetak.cmd</code>. Bila SmartScreen menampilkan &quot;Windows protected your
+            PC&quot;, klik <strong>More info</strong> lalu <strong>Run anyway</strong>. Launcher .cmd ini
+            membuka blokir file dan melewati Execution Policy secara otomatis.
+          </p>
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="default">
-              <a href="/agent/kti-print-agent.ps1" download>
-                <Download className="size-4" /> kti-print-agent.ps1
+              <a href="/agent/Pasang-Agen-Cetak.cmd" download>
+                <Download className="size-4" /> Pasang-Agen-Cetak.cmd
               </a>
             </Button>
             <Button asChild variant="secondary">
               <a href="/agent/install-agent.ps1" download>
                 <Download className="size-4" /> install-agent.ps1
+              </a>
+            </Button>
+            <Button asChild variant="secondary">
+              <a href="/agent/kti-print-agent.ps1" download>
+                <Download className="size-4" /> kti-print-agent.ps1
               </a>
             </Button>
             <Button asChild variant="outline">

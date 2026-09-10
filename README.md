@@ -64,3 +64,18 @@ ke printer Windows lewat winspool RAW.
 Alternatif tanpa cloud: jalankan di PC printer sendiri
 (`npm run prod:build`, `npm run prod:start`, `npm run autostart:install`) dan
 akses lewat IP LAN.
+
+## Deploy ke VPS sendiri (tanpa akun Vercel)
+
+Butuh Docker di VPS. Salin folder proyek (tanpa `node_modules`) ke VPS, lalu:
+
+```bash
+docker compose up -d --build     # build image + jalan di port 3000, auto-restart
+docker compose logs -f web       # cek log
+```
+
+Akses `http://IP-VPS:3000`. Untuk HTTPS dengan domain, pakai `deploy/Caddyfile`
+(Caddy mengurus sertifikat otomatis). Agen cetak di PC pengguna bekerja untuk
+halaman HTTP maupun HTTPS.
+
+Update versi: tarik perubahan lalu `docker compose up -d --build` lagi.
