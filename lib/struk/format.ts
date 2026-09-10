@@ -146,10 +146,10 @@ export function renderStruk(d: StrukData, logos: LogoBitmap[] = []): StrukLine[]
       L.push(B(`Info Tol : ${d.infoTol.trim()}`, "tengah"));
     }
   }
-  // Template 80mm: font diperbesar. Baris Font B naik ke Font A; baris yang di 58mm sudah
-  // Font A (gerbang, GOL) dicetak Font A tinggi ganda.
+  // Semua baris transaksi Font A (12x24): owner minta 58mm diperbesar ~50% (2026-09-10),
+  // 80mm sudah Font A sejak awal. Di 80mm gerbang & GOL ditambah tinggi ganda.
   const besar = lebar === 80;
-  const fontB: FontStruk = besar ? "A" : "B";
+  const fontB: FontStruk = "A";
   if (d.gerbang.trim()) {
     // di struk asli nama gerbang Font A bobot normal (lebih besar dari baris tanggal, tidak setebal GOL)
     L.push({

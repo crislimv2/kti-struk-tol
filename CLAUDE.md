@@ -55,7 +55,8 @@ lib/struk/
                 TANPA GS L / GS W / ESC a / ESC *: di XS-80BT parameter GS W tercetak sebagai
                 huruf ("C-cedilla"/"@") dan ESC a diabaikan setelah raster (foto cetak 2026-09-10).
                 Baris dengan indentDot/ikonTelepon DILEWATI (sudah ada di raster kepala).
-  Template 80mm: logo & ikon varian "-80" (1,5x), teks kepala 1,5x, baris Font B -> Font A,
+  Font 58mm +50% (owner 2026-09-10): SEMUA baris transaksi Font A (bukan B), teks kepala raster
+                1,5x + ikon 29 dot di kedua template. Template 80mm: logo varian "-80" (1,5x),
                 gerbang & GOL Font A tinggi ganda; blok transaksi tetap selebar 58mm di tengah.
                 Jarak baris global ESC 3 22. (Percobaan sela per baris +6/+9 dot dan tanpa tinggi
                 ganda DITOLAK owner 2026-09-10: "jauh lebih jelek", dikembalikan.)

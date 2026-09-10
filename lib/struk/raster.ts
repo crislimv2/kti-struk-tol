@@ -163,8 +163,9 @@ async function teksMuat(
  */
 export async function buildHeaderMono(spec: HeaderSpec): Promise<Mono> {
   const W = LEBAR_DOT[spec.lebar];
-  // template 80mm: semua elemen kepala 1,5x (logo sudah varian "-80" dari pemanggil)
-  const skala = spec.lebar === 80 ? 1.5 : 1;
+  // Teks kepala 1,5x di kedua template (58mm: owner minta font +50%, 2026-09-10).
+  // Logo mengikuti pemanggil (58mm ukuran dasar, 80mm varian "-80").
+  const skala = 1.5;
   const logos = spec.logos.map(logoKeMono);
   const { kiri } = geometriLogo(spec.logos, spec.lebar);
   const logoH = logos.length ? Math.max(...logos.map((l) => l.height)) : 0;
@@ -187,7 +188,8 @@ export async function buildHeaderMono(spec: HeaderSpec): Promise<Mono> {
     const ukuran = Math.round(16 * skala);
     const kiriTeks = await teksMono("Info Tol :", { size: ukuran, bold: true });
     const kananTeks = await teksMono(spec.infoTol.trim(), { size: ukuran, bold: true });
-    const ikon = spec.ikonTelepon ? ikonKeMono(spec.lebar) : null;
+    // ikon mengikuti skala teks (varian 29 dot), bukan lebar kertas
+    const ikon = spec.ikonTelepon ? ikonKeMono(skala >= 1.5 ? 80 : 58) : null;
     const sela = Math.round(6 * skala);
     const w = kiriTeks.width + sela + (ikon ? ikon.width + sela : 0) + kananTeks.width;
     const h = Math.max(kiriTeks.height, kananTeks.height, ikon?.height ?? 0);
