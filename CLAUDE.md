@@ -177,3 +177,18 @@ Target: web di Vercel (gratis), dipakai orang lain, printer USB di PC mereka.
 - Vercel: proyek tertaut (.vercel/, akun crislimv2), deploy `npx vercel --prod --yes`.
   Perbaikan 2026-09-10: `outputFileTracingIncludes` untuk @img/sharp-libvips-linux-x64
   (tanpa itu /api/header & /api/escpos 500: libvips-cpp.so tidak ikut ke bundle).
+
+## Template SPBU Pertamina (2026-09-13)
+
+- `lib/spbu/types.ts` SpbuData (jenis:"spbu"), `presets.ts` SPBU_PRESETS (14201147 AH. Nasution),
+  BBM_PRESETS (Bio Solar 6.800/16.555, Pertalite, Dexlite, Dex, Pertamax; harga perkiraan,
+  ubah di form), hitungDariVolume/hitungDariDibayar (isi Rp 100.000 -> volume otomatis).
+- `lib/spbu/format.ts` renderSpbu -> StrukLine[] Font A 32 kolom; pemisah "- - -" dengan sela
+  8 dot; angka ribuan koma (en-US); paragraf subsidi dibungkus rata tengah (bungkusTengah).
+- Logo: `public/logos/pertamina.jpg` -> `npm run logos:build` (trim + threshold 200) ->
+  `pertamina` 150x35 dot. Kepala SPBU = logo saja (buildHeaderRaster tanpa sub-judul/Info Tol).
+- `lib/struk/nota.ts` NotaData = StrukData | SpbuData (adalahSpbu); `lib/struk/render-nota.ts`
+  (server-only) bangunEscPos/notaValid/namaDokumen dipakai /api/print & /api/escpos.
+- UI: tab "Struk Tol" / "Struk SPBU" di struk-app.tsx, `components/spbu/spbu-form.tsx`,
+  riwayat campuran (storage v2 menerima kedua jenis; Supabase hanya tol).
+- Format lengkap: docs/FORMAT-STRUK-TOL.md bagian 12.

@@ -9,6 +9,8 @@ import transsumatera from "./transsumatera.json";
 import transsumatera80 from "./transsumatera-80.json";
 import waskita from "./waskita.json";
 import waskita80 from "./waskita-80.json";
+import pertamina from "./pertamina.json";
+import pertamina80 from "./pertamina-80.json";
 
 /**
  * Bitmap logo 1-bit hasil `npm run logos:build` (scripts/build-logos.mjs).
@@ -25,6 +27,8 @@ const LOGOS: Record<string, LogoBitmap> = {
   "transsumatera-80": transsumatera80 as LogoBitmap,
   waskita: waskita as LogoBitmap,
   "waskita-80": waskita80 as LogoBitmap,
+  pertamina: pertamina as LogoBitmap,
+  "pertamina-80": pertamina80 as LogoBitmap,
 };
 
 /** PNG hitam-putih hasil konversi (public/logos/mono), dipakai pratinjau agar sama dengan cetakan. */

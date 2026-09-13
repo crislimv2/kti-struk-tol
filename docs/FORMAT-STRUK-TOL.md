@@ -219,3 +219,44 @@ jadi struk HK hanya memakai logo HK.
   Kunciran, Hutama Karya. Pekanbaru: Info Tol 0821 7608 8880 (HK-KAU: 0813 2900 0020).
 - Struk Hutama Karya dicetak di kertas **80mm penuh** (logo HK kiri + Trans Sumatera kanan),
   bukan 58mm. Struk Jasa Marga & Waskita tetap 58mm.
+
+## 12. Template struk SPBU Pertamina (foto 19/07/2026, SPBU 14201147 AH. Nasution Medan)
+
+Kertas 58mm, semua teks Font A 32 kolom, logo Pertamina (simbol + wordmark) raster di atas.
+
+```
+[logo PERTAMINA]                 tengah, ~150 dot
+14201147                         kode SPBU, tengah
+SPBU AH.NASUTION NO.28           tengah
+JL. A.H.NASUTION NO. 28 MEDAN    tengah
+Shift: 3      No. Trans: 5130078 dua kolom
+Waktu: 19/07/2026 00:13:02
+- - - - - - - - - - - - - - - -  pemisah (dash-spasi), sela 8 dot atas-bawah
+Pulau/Pompa : 11                 label 12 kolom
+Operator    : RAIHAN
+Jenis BBM   : BIO_SOLAR
+Volume      : 14.70 liter
+- - - -
+Informasi Harga BBM (Rp/Liter)
+Harga Non Subsidi  : 16,555      label 19 kolom, angka rata kanan, ribuan koma
+Subsidi Pemerintah :  9,755      = non subsidi - harga jual
+Harga Jual         :  6,800
+- - - -
+Total Penjualan (Rp)
+Tanpa Subsidi      : 243,398     volume x non subsidi
+Subsidi Pemerintah : 143,398     tanpa subsidi - dibayar
+Dibayar Konsumen   : 100,000
+- - - -
+CASH                             metode bayar
+                         100,000 nominal rata kanan
+- - - -
+No. Plat  : K1924ES
+- - - -
+Anda mendapat subsidi dari Pemerintah sebesar Rp 143,398 (Perhitungan
+Subsidi Unaudited atau Estimasi). Gunakan BBM Subsidi secara bijak.
+                                 paragraf dibungkus 32 kolom, tiap baris tengah
+```
+
+BBM non-subsidi (Pertamax/Dexlite/Dex): blok harga hanya "Harga Jual", total hanya
+"Dibayar Konsumen", tanpa paragraf subsidi (belum ada foto referensi, format diturunkan).
+Harga acuan: Bio Solar 6.800 / non subsidi 16.555 (Jul 2026). Kode: lib/spbu/*.

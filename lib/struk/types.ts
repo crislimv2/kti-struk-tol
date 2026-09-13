@@ -21,6 +21,8 @@ export interface GayaStruk {
 }
 
 export interface StrukData {
+  /** diskriminan jenis nota; data lama tanpa field ini = tol */
+  jenis?: "tol";
   id: string;
   gerbangId: string;
   operatorId: string;

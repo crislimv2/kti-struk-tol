@@ -64,6 +64,8 @@ const LOGOS_DASAR = [
   { id: "hutamakarya", file: "hutamakarya.svg", width: 110 },
   { id: "transsumatera", file: "transsumatera.svg", width: 150, optional: true },
   { id: "waskita", file: "waskita.svg", width: 100, wordmark: false },
+  // Pertamina (struk SPBU): sumber JPG berwarna dengan margin putih -> trim, semua warna jadi hitam
+  { id: "pertamina", file: "pertamina.jpg", width: 150, lumThreshold: 200, trim: true },
 ];
 const LOGOS = LOGOS_DASAR.flatMap((l) => [
   l,
@@ -132,10 +134,11 @@ function packBits(w, h, mono) {
   return { bytesPerRow, bits };
 }
 
-async function toMono(file, width, lumThreshold = 235, cropGap = false, crop = null, erase = []) {
+async function toMono(file, width, lumThreshold = 235, cropGap = false, crop = null, erase = [], trim = false) {
   const input = readFileSync(file);
   let img = sharp(input, { density: DENSITY });
   if (crop) img = img.extract(crop);
+  if (trim) img = sharp(await img.trim({ threshold: 40 }).png().toBuffer());
   if (erase.length) {
     img = img.composite(
       erase.map((r) => ({
@@ -189,6 +192,7 @@ for (const logo of LOGOS) {
     logo.cropGap,
     logo.crop ?? null,
     logo.erase ?? [],
+    logo.trim ?? false,
   );
   const wordmarkX = logo.wordmark ? cariWordmarkX(w, h, mono) : 0;
   const json = { id: logo.id, width: w, height: h, bytesPerRow, wordmarkX, data: bits.toString("base64") };
