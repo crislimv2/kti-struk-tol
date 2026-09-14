@@ -42,7 +42,7 @@ export async function bangunEscPos(
   const copies = Math.min(Math.max(Number(opts.copies) || 1, 1), 5);
   let single: Uint8Array;
   if (adalahSpbu(n)) {
-    const lebar: LebarKertas = 58;
+    const lebar: LebarKertas = n.lebarKertas === 80 ? 80 : 58;
     const logos = getLogoBitmaps(LOGO_SPBU, lebar);
     const header = await buildHeaderRaster({ logos, subJudul: "", infoTol: "", ikonTelepon: false, lebar });
     single = buildStrukEscPos(renderSpbu(n), header, { lebar, cut: opts.cut ?? true, feed: opts.feed });

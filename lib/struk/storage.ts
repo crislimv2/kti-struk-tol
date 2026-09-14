@@ -31,7 +31,9 @@ export function muatRiwayat(): NotaData[] {
     const arr = raw ? (JSON.parse(raw) as unknown[]) : [];
     return Array.isArray(arr)
       ? arr.filter(valid).map((x) =>
-          adalahSpbu(x) ? x : { ...x, jenis: "tol" as const, lebarKertas: x.lebarKertas === 80 ? 80 : 58 },
+          adalahSpbu(x)
+            ? { ...x, lebarKertas: x.lebarKertas === 80 ? 80 : 58 }
+            : { ...x, jenis: "tol" as const, lebarKertas: x.lebarKertas === 80 ? 80 : 58 },
         )
       : [];
   }, []);

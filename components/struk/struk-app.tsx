@@ -81,6 +81,7 @@ function spbuBaru(dasar?: Partial<SpbuData>): SpbuData {
   const kosong: SpbuData = {
     jenis: "spbu",
     id: crypto.randomUUID(),
+    lebarKertas: 58,
     spbuId: SPBU_PRESETS[0].id,
     kode: "",
     nama: "",
@@ -177,9 +178,10 @@ export function StrukApp() {
     };
   }, [pilihDefault]);
 
-  const lebar: LebarKertas = jenis === "spbu" ? 58 : data.lebarKertas === 80 ? 80 : 58;
+  const lebar: LebarKertas =
+    (jenis === "spbu" ? spbu.lebarKertas : data.lebarKertas) === 80 ? 80 : 58;
   const logos = useMemo(
-    () => (jenis === "spbu" ? getLogoBitmaps(LOGO_SPBU, 58) : getLogoBitmaps(data.logoIds, lebar)),
+    () => (jenis === "spbu" ? getLogoBitmaps(LOGO_SPBU, lebar) : getLogoBitmaps(data.logoIds, lebar)),
     [jenis, data.logoIds, lebar],
   );
   const lines = useMemo(
@@ -188,7 +190,7 @@ export function StrukApp() {
   );
   // Kepala struk (logo + sub-judul + Info Tol) dirender server sebagai PNG yang sama dengan raster cetak
   const headerSrc = useMemo(() => {
-    if (jenis === "spbu") return `/api/header?${new URLSearchParams({ logos: LOGO_SPBU.join(","), lebar: "58" })}`;
+    if (jenis === "spbu") return `/api/header?${new URLSearchParams({ logos: LOGO_SPBU.join(","), lebar: String(lebar) })}`;
     if (logos.length === 0 && !data.subJudul.trim() && !data.infoTol.trim()) return null;
     const q = new URLSearchParams({
       logos: data.logoIds.join(","),
@@ -266,7 +268,7 @@ export function StrukApp() {
 
   const strukBaruSesuaiJenis = () => {
     if (jenis === "spbu") {
-      setSpbu(spbuBaru({ spbuId: spbu.spbuId, jenisBbm: spbu.jenisBbm, subsidi: spbu.subsidi, hargaJual: spbu.hargaJual, hargaNonSubsidi: spbu.hargaNonSubsidi, noPlat: spbu.noPlat, operator: spbu.operator, pulauPompa: spbu.pulauPompa, shift: spbu.shift }));
+      setSpbu(spbuBaru({ spbuId: spbu.spbuId, lebarKertas: spbu.lebarKertas, jenisBbm: spbu.jenisBbm, subsidi: spbu.subsidi, hargaJual: spbu.hargaJual, hargaNonSubsidi: spbu.hargaNonSubsidi, noPlat: spbu.noPlat, operator: spbu.operator, pulauPompa: spbu.pulauPompa, shift: spbu.shift }));
     } else {
       setData(strukBaru({ gerbangId: data.gerbangId, golongan: data.golongan, kartuLabel: data.kartuLabel, cn: data.cn }));
     }

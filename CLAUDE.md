@@ -185,6 +185,8 @@ Target: web di Vercel (gratis), dipakai orang lain, printer USB di PC mereka.
   -> buatNoTrans(contoh) = contoh + acak 0..9999),
   BBM_PRESETS (Bio Solar 6.800/16.555, Pertalite, Dexlite, Dex, Pertamax; harga perkiraan,
   ubah di form), hitungDariVolume/hitungDariDibayar (isi Rp 100.000 -> volume otomatis).
+- SpbuData.lebarKertas 58 | 80 (2026-09-14): 80mm = logo pertamina-80 (1,5x) + blok 32 kolom
+  di tengah kertas (StrukLine.blok offset 8), baris tengah = tengah kertas; pilihan di form.
 - `lib/spbu/format.ts` renderSpbu -> StrukLine[] Font A 32 kolom; pemisah "- - -" dengan sela
   8 dot; angka ribuan koma (en-US); paragraf subsidi dibungkus rata tengah (bungkusTengah).
 - Logo: `public/logos/pertamina.jpg` -> `npm run logos:build` (trim + threshold 200) ->

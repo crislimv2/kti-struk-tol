@@ -1,7 +1,13 @@
-/** Struk SPBU Pertamina (format dari foto struk armada, Jul 2026). Kertas 58mm, Font A 32 kolom. */
+import type { LebarKertas } from "@/lib/struk/types";
+
+/**
+ * Struk SPBU Pertamina (format dari foto struk armada, Jul 2026). Font A 32 kolom.
+ * Kertas 58mm = blok rapat kiri; 80mm = logo 1,5x, blok 32 kolom di tengah kertas.
+ */
 export interface SpbuData {
   jenis: "spbu";
   id: string;
+  lebarKertas: LebarKertas;
   spbuId: string;
   /** kode SPBU di bawah logo, contoh "14201147" */
   kode: string;

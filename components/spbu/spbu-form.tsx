@@ -103,7 +103,19 @@ export function SpbuForm({ data, onChange }: Props) {
             <Label htmlFor="spbu-nama">Nama SPBU</Label>
             <Input id="spbu-nama" value={data.nama} onChange={(e) => set("nama", e.target.value)} placeholder="SPBU AH.NASUTION NO.28" maxLength={32} />
           </div>
-          <div className="grid gap-2 sm:col-span-2">
+          <div className="grid gap-2">
+            <Label htmlFor="spbu-lebar">Lebar kertas struk</Label>
+            <select
+              id="spbu-lebar"
+              className={selectClass}
+              value={data.lebarKertas}
+              onChange={(e) => set("lebarKertas", Number(e.target.value) === 80 ? 80 : 58)}
+            >
+              <option value={58}>58mm - blok rapat kiri</option>
+              <option value={80}>80mm - logo 1,5x, blok di tengah</option>
+            </select>
+          </div>
+          <div className="grid gap-2">
             <Label htmlFor="spbu-alamat">Alamat</Label>
             <Input id="spbu-alamat" value={data.alamat} onChange={(e) => set("alamat", e.target.value)} placeholder="JL. A.H.NASUTION NO. 28 MEDAN" maxLength={32} />
           </div>
