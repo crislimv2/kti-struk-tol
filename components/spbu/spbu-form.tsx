@@ -35,6 +35,7 @@ export function terapkanSpbu(data: SpbuData, spbuId: string): SpbuData {
     kode: s.id === "custom" ? data.kode : s.kode,
     nama: s.id === "custom" ? data.nama : s.nama,
     alamat: s.id === "custom" ? data.alamat : s.alamat,
+    noTrans: s.id === "custom" ? data.noTrans : buatNoTrans(s.noTransContoh),
   };
 }
 
@@ -89,7 +90,7 @@ export function SpbuForm({ data, onChange }: Props) {
             >
               {SPBU_PRESETS.map((s) => (
                 <option key={s.id} value={s.id}>
-                  {s.id === "custom" ? "Lainnya (isi manual)" : `${s.kode} - ${s.nama}`}
+                  {s.id === "custom" ? "Lainnya (isi manual)" : `${s.nama} (${s.alamat})`}
                 </option>
               ))}
             </select>
@@ -129,7 +130,7 @@ export function SpbuForm({ data, onChange }: Props) {
             <Label htmlFor="spbu-notrans">No. Trans</Label>
             <div className="flex gap-2">
               <Input id="spbu-notrans" className="min-w-0" value={data.noTrans} onChange={(e) => set("noTrans", e.target.value)} maxLength={10} />
-              <Button type="button" className="shrink-0" variant="outline" size="icon" title="Acak" onClick={() => set("noTrans", buatNoTrans())}>
+              <Button type="button" className="shrink-0" variant="outline" size="icon" title="Acak" onClick={() => set("noTrans", buatNoTrans(findSpbu(data.spbuId).noTransContoh))}>
                 <RefreshCw className="size-4" />
               </Button>
             </div>

@@ -180,7 +180,9 @@ Target: web di Vercel (gratis), dipakai orang lain, printer USB di PC mereka.
 
 ## Template SPBU Pertamina (2026-09-13)
 
-- `lib/spbu/types.ts` SpbuData (jenis:"spbu"), `presets.ts` SPBU_PRESETS (14201147 AH. Nasution),
+- `lib/spbu/types.ts` SpbuData (jenis:"spbu"), `presets.ts` SPBU_PRESETS (30 SPBU armada dari daftar
+  owner 2026-09-14; kode 8 digit hanya diketahui AH. Nasution 14201147; `noTransContoh` per lokasi
+  -> buatNoTrans(contoh) = contoh + acak 0..9999),
   BBM_PRESETS (Bio Solar 6.800/16.555, Pertalite, Dexlite, Dex, Pertamax; harga perkiraan,
   ubah di form), hitungDariVolume/hitungDariDibayar (isi Rp 100.000 -> volume otomatis).
 - `lib/spbu/format.ts` renderSpbu -> StrukLine[] Font A 32 kolom; pemisah "- - -" dengan sela
